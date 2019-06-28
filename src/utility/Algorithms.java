@@ -1,5 +1,8 @@
 package utility;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class Algorithms {
     public static int binarySearch(long x, long[] array) {
         int first = 0, last = array.length - 1, mid = 0;
@@ -68,9 +71,6 @@ public class Algorithms {
                 ++j;
             }
             prefix[i] = j;
-//            if(j == 4){
-//                System.out.println("4");
-//            }
         }
         return prefix;
     }
@@ -81,10 +81,10 @@ public class Algorithms {
         String newString = subString + "@" + mainString;
         int[] p;
         p = prefixFunction(newString);
-        for (int i = 0; i < p.length; i++) {
-            System.out.print(p[i] + " ");
-        }
-        System.out.println();
+//        for (int i = 0; i < p.length; i++) {
+//            System.out.print(p[i] + " ");
+//        }
+//        System.out.println();
         int counter = 0;
         for (int item: p){
             if(item == subString.length()) {
@@ -96,36 +96,45 @@ public class Algorithms {
         return counter;
     }
 
-    public static void strangeDialog2(String subString, String mainString)//поиск подстроки в строке
+    public static List<Integer> getFamiliarStringsUsingHash(String subString, String mainString)
     {
         //mainString = "asdfj dr drew dia sdnh drew sdccdrewccc";
         //subString = "dr";
-        int p = 31;
+        final int p = 31;
         long[] hash = new long[mainString.length()];
         hash[0] = 0;
         long pow = 1;
         char[] chars = mainString.toCharArray();
+
         for (int i = 0; i < mainString.length(); i++) {
             hash[i] = (chars[i] - 'a' + 1) * pow;
             pow *= p;
             if (i > 0)
                 hash[i] += hash[i - 1];
         }
+
         long[] pows = new long[mainString.length() + 1];
         pows[0] = 1;
+
         for (int i = 1; i < pows.length; ++i) {
             pows[i] = pows[i - 1] * p;
         }
+
         long hashSub = hash(subString);
+        List<Integer> targetWordIndexes = new LinkedList<>();
+
         for (int i = 0; i + subString.length() - 1 < mainString.length(); i++) {
             long h = hash[i + subString.length() - 1];
             if (i > 0) {
                 h -= hash[i - 1];
             }
             if (h == hashSub * pows[i]) {
-                System.out.println(i);
+                //System.out.println(i);
+                targetWordIndexes.add(i);
             }
         }
+
+        return targetWordIndexes;
     }
 
     public static long hash(String s)

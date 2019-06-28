@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 @WebServlet(name = "WordCounterServlet", urlPatterns = { "/word" })
 public class WordCounterServlet extends HttpServlet {
@@ -23,6 +24,7 @@ public class WordCounterServlet extends HttpServlet {
         String targetWord = req.getParameter("target");
 
         int count = Algorithms.getFamiliarStrings(targetWord.toLowerCase(), text.toLowerCase());
+        List<Integer> indexes = Algorithms.getFamiliarStringsUsingHash(targetWord.toLowerCase(), text.toLowerCase());
 
         out.println("<br>");
         out.println("your text is ");
@@ -32,5 +34,10 @@ public class WordCounterServlet extends HttpServlet {
         out.println(targetWord);
         out.println("<br>");
         out.println("count of words in text is " + count);
+        out.println("<br>");
+        for (int i = 0; i < indexes.size(); i++) {
+            out.println(i + "th index is " + indexes.get(i));
+            out.println("<br>");
+        }
     }
 }
